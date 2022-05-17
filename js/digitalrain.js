@@ -3,7 +3,13 @@ const canvas = document.getElementById("digital-rain");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
-ctx.scale(1,1);
+const dpi = window.devicePixelRatio;
+canvas.width = window.innerWidth * dpi;
+canvas.height = window.innerHeight * dpi;
+ctx.scale(dpi,dpi);
+canvas.style.width = window.innerWidth + 'px';
+canvas.style.height = window.innerHeight + 'px';
+// ctx.scale(1,1);
 let w = canvas.width;
 let h = canvas.height;
 let currentPace = 'Normal';
@@ -246,8 +252,14 @@ function streamColor(letter,ctx,streamLength,r,g,b,r2,g2,b2,r3,g3,b3)
 	}
 }
 //go through the train array which is filled with arrays(the representing trains) of letter objects to draw them on canvas
-function drawTrains(array,ctx,r,g,b,r2,g2,b2,r3,g3,b3)
+function drawTrains(array,canvas,ctx,r,g,b,r2,g2,b2,r3,g3,b3)
 {
+	const dpi = window.devicePixelRatio;
+    canvas.width = window.innerWidth * dpi;
+    canvas.height = window.innerHeight * dpi;
+    ctx.scale(dpi,dpi);
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
 	let trainLen;
  	ctx.fillStyle = "rgb(0,0,0)";
 	ctx.fillRect(0,0,w, h);
@@ -355,7 +367,7 @@ function matrixRain(trains)
 		}
 	}
 }
-drawTrains(trains,ctx,currentR1,currentG1,currentB1,currentR2,currentG2,currentB2,currentR3,currentG3,currentB3);
+drawTrains(trains,canvas,ctx,currentR1,currentG1,currentB1,currentR2,currentG2,currentB2,currentR3,currentG3,currentB3);
 let fpsInterval = 1000 / 20;
 let dropCounter = 0;
 let lastTime = 0;
@@ -368,7 +380,7 @@ function animateMatrix(time = 0)
 	{
 		matrixRain(trains);
 	}
-	drawTrains(trains,ctx,currentR1,currentG1,currentB1,currentR2,currentG2,currentB2,currentR3,currentG3,currentB3);
+	drawTrains(trains,canvas,ctx,currentR1,currentG1,currentB1,currentR2,currentG2,currentB2,currentR3,currentG3,currentB3);
 	matrixID = requestAnimationFrame(animateMatrix);
 }
 animateMatrix();
